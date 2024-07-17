@@ -1,5 +1,4 @@
 target/*
-!target/spring-petclinic-3.3.0-SNAPSHOT.jar
 bin/*
 build/*
 .gradle/*
