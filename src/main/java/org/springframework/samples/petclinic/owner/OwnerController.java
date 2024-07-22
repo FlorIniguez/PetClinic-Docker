@@ -161,7 +161,7 @@ class OwnerController {
 	@PostMapping("/owners/{ownerId}/edit")
 	public String processUpdateOwnerForm(@Valid Owner owner, BindingResult result, @PathVariable("ownerId") int ownerId,
 										 RedirectAttributes redirectAttributes) {
-		log.info("Iniciando actualización del propietario con ID: {}", ownerId);
+		log.info("Starting owner update with ID: {}", ownerId);
 		if (result.hasErrors()) {
 			log.warn("Starting owner update with ID: {}", ownerId);
 			redirectAttributes.addFlashAttribute("error", "There was an error in updating the owner.");
@@ -185,7 +185,7 @@ class OwnerController {
 	@GetMapping("/owners/{ownerId}")
 	public ModelAndView showOwner(@PathVariable("ownerId") int ownerId) {
 		//Crea un nuevo ModelAndView, especificando "owners/ownerDetails" como la vista a usar.
-		log.info("Mostrando detalles del Owner con ID: {}", ownerId);
+		log.info("Showing Owner details with ID: {}", ownerId);
 		ModelAndView mav = new ModelAndView("owners/ownerDetails");
 		Owner owner = this.owners.findById(ownerId);
 		//Añade el objeto owner al modelo. Esto hace que los datos del owner estén disponibles en la vista.
