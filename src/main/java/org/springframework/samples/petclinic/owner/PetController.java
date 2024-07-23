@@ -91,7 +91,7 @@ class PetController {
 		Pet pet = new Pet();
 		owner.addPet(pet);
 		model.put("pet", pet);
-		log.info("A new pet was created");
+		log.info("Starting creation form for a new pet");
 		return VIEWS_PETS_CREATE_OR_UPDATE_FORM;
 	}
 
@@ -119,7 +119,7 @@ class PetController {
 
 		this.owners.save(owner);
 		redirectAttributes.addFlashAttribute("message", "New Pet has been Added");
-		log.info("new pet was added ID: {}", pet.getId());
+		log.info("new pet was added");
 		return "redirect:/owners/{ownerId}";
 	}
 
