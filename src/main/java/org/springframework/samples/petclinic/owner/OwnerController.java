@@ -54,7 +54,8 @@ class OwnerController {
 		dataBinder.setDisallowedFields("id");
 	}
 
-	//Es una técnica común en Spring MVC para manejar tanto la creación como la edición de entidades en un mismo
+	// Es una técnica común en Spring MVC para manejar tanto la creación como la edición
+	// de entidades en un mismo
 	// controlador y formulario. Esto simplifica el código y reduce la duplicación.
 	@ModelAttribute("owner")
 	public Owner findOwner(@PathVariable(name = "ownerId", required = false) Integer ownerId) {
@@ -64,10 +65,11 @@ class OwnerController {
 
 	@GetMapping("/owners/new")
 	public String initCreationForm(Map<String, Object> model) {
-		//Toma un Map como parámetro, que se usa para añadir atributos al modelo.
+		// Toma un Map como parámetro, que se usa para añadir atributos al modelo.
 		// El método devuelve un String, que será el nombre de la vista a renderizar.
 
-		//crea un propietario vacio para mostrarlo en el front y se puede llenar desde el form
+		// crea un propietario vacio para mostrarlo en el front y se puede llenar desde el
+		// form
 		Owner owner = new Owner();
 		model.put("owner", owner);
 		log.info("Starting creation form for a new owner");
@@ -95,18 +97,18 @@ class OwnerController {
 	}
 
 	@GetMapping("/owners")
-	//Ningún owner encontrado: Muestra un mensaje de error.
-	//Un solo owner encontrado: Redirige a la página de detalles de ese owner.
-	//Múltiples owners encontrados: Muestra una lista paginada de resultados.
+	// Ningún owner encontrado: Muestra un mensaje de error.
+	// Un solo owner encontrado: Redirige a la página de detalles de ese owner.
+	// Múltiples owners encontrados: Muestra una lista paginada de resultados.
 	public String processFindForm(@RequestParam(defaultValue = "1") int page, Owner owner, BindingResult result,
-								  Model model) {
+			Model model) {
 		// allow parameterless GET request for /owners to return all records
 		if (owner.getLastName() == null) {
 			owner.setLastName(""); // empty string signifies broadest possible search
 		}
 
 		// find owners by last name
-		//buscar owners por apellido, con paginación.
+		// buscar owners por apellido, con paginación.
 		Page<Owner> ownersResults = findPaginatedForOwnersLastName(page, owner.getLastName());
 		if (ownersResults.isEmpty()) {
 			log.info("No owners found for lastname: {}", owner.getLastName());
@@ -115,7 +117,8 @@ class OwnerController {
 			return "owners/findOwners";
 		}
 
-//Si se encuentra exactamente un owner: Redirige a la página de detalles de ese owner.
+		// Si se encuentra exactamente un owner: Redirige a la página de detalles de ese
+		// owner.
 		if (ownersResults.getTotalElements() == 1) {
 			// 1 owner found
 			owner = ownersResults.iterator().next();
@@ -124,16 +127,18 @@ class OwnerController {
 		}
 
 		// multiple owners found
-		log.info("{} owners found for last name '{}'. Showing page {} of results",
-			ownersResults.getTotalElements(), owner.getLastName(), page);
-		//log aca sirve para:
-		//Monitorear el uso de la función de búsqueda. Identificar patrones en las búsquedas de los usuarios.
-		//Depurar problemas relacionados con la paginación.Analizar la eficacia de la función de búsqueda
+		log.info("{} owners found for last name '{}'. Showing page {} of results", ownersResults.getTotalElements(),
+				owner.getLastName(), page);
+		// log aca sirve para:
+		// Monitorear el uso de la función de búsqueda. Identificar patrones en las
+		// búsquedas de los usuarios.
+		// Depurar problemas relacionados con la paginación.Analizar la eficacia de la
+		// función de búsqueda
 		return addPaginationModel(page, model, ownersResults);
 	}
 
 	// Este método es principalmente para preparar el modelo para la vista.
-	//EN ESTOS METODOS PODRIA PONER LOGS DE DEBUG
+	// EN ESTOS METODOS PODRIA PONER LOGS DE DEBUG
 	private String addPaginationModel(int page, Model model, Page<Owner> paginated) {
 		List<Owner> listOwners = paginated.getContent();
 		model.addAttribute("currentPage", page);
@@ -152,7 +157,8 @@ class OwnerController {
 	@GetMapping("/owners/{ownerId}/edit")
 	public String initUpdateOwnerForm(@PathVariable("ownerId") int ownerId, Model model) {
 		Owner owner = this.owners.findById(ownerId);
-		//Añade el owner encontrado al modelo. Esto permite que la información del owner esté disponible en la vista para ser editada.
+		// Añade el owner encontrado al modelo. Esto permite que la información del owner
+		// esté disponible en la vista para ser editada.
 		model.addAttribute(owner);
 		log.info("Starting update form for owner with ID: {}", ownerId);
 		return VIEWS_OWNER_CREATE_OR_UPDATE_FORM;
@@ -160,7 +166,7 @@ class OwnerController {
 
 	@PostMapping("/owners/{ownerId}/edit")
 	public String processUpdateOwnerForm(@Valid Owner owner, BindingResult result, @PathVariable("ownerId") int ownerId,
-										 RedirectAttributes redirectAttributes) {
+			RedirectAttributes redirectAttributes) {
 		log.info("Starting owner update with ID: {}", ownerId);
 		if (result.hasErrors()) {
 			log.warn("Starting owner update with ID: {}", ownerId);
@@ -178,17 +184,18 @@ class OwnerController {
 
 	/**
 	 * Custom handler for displaying an owner.
-	 *
 	 * @param ownerId the ID of the owner to display
 	 * @return a ModelMap with the model attributes for the view
 	 */
 	@GetMapping("/owners/{ownerId}")
 	public ModelAndView showOwner(@PathVariable("ownerId") int ownerId) {
-		//Crea un nuevo ModelAndView, especificando "owners/ownerDetails" como la vista a usar.
+		// Crea un nuevo ModelAndView, especificando "owners/ownerDetails" como la vista a
+		// usar.
 		log.info("Showing Owner details with ID: {}", ownerId);
 		ModelAndView mav = new ModelAndView("owners/ownerDetails");
 		Owner owner = this.owners.findById(ownerId);
-		//Añade el objeto owner al modelo. Esto hace que los datos del owner estén disponibles en la vista.
+		// Añade el objeto owner al modelo. Esto hace que los datos del owner estén
+		// disponibles en la vista.
 		mav.addObject(owner);
 		return mav;
 	}
