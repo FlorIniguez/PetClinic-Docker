@@ -63,7 +63,7 @@ class PetController {
 
 	@ModelAttribute("pet")
 	public Pet findPet(@PathVariable("ownerId") int ownerId,
-					   @PathVariable(name = "petId", required = false) Integer petId) {
+			@PathVariable(name = "petId", required = false) Integer petId) {
 
 		if (petId == null) {
 			return new Pet();
@@ -97,7 +97,7 @@ class PetController {
 
 	@PostMapping("/pets/new")
 	public String processCreationForm(Owner owner, @Valid Pet pet, BindingResult result, ModelMap model,
-									  RedirectAttributes redirectAttributes) {
+			RedirectAttributes redirectAttributes) {
 		log.info("Processing new pet creation form for owner ID: {}", owner.getId());
 		if (StringUtils.hasText(pet.getName()) && pet.isNew() && owner.getPet(pet.getName(), true) != null) {
 			log.warn("Attempt to create a pet with duplicate name: {}", pet.getName());
@@ -125,7 +125,7 @@ class PetController {
 
 	@GetMapping("/pets/{petId}/edit")
 	public String initUpdateForm(Owner owner, @PathVariable("petId") int petId, ModelMap model,
-								 RedirectAttributes redirectAttributes) {
+			RedirectAttributes redirectAttributes) {
 		Pet pet = owner.getPet(petId);
 		model.put("pet", pet);
 		log.info("starting form to create a new pet");
@@ -134,7 +134,7 @@ class PetController {
 
 	@PostMapping("/pets/{petId}/edit")
 	public String processUpdateForm(@Valid Pet pet, BindingResult result, Owner owner, ModelMap model,
-									RedirectAttributes redirectAttributes) {
+			RedirectAttributes redirectAttributes) {
 
 		log.info("Processing edit form for pet ID: {} for owner ID: {}", pet.getId(), owner.getId());
 		String petName = pet.getName();
@@ -155,14 +155,14 @@ class PetController {
 		}
 
 		if (result.hasErrors()) {
-			log.warn("Validation errors to edit the pet: {}",result.getAllErrors());
+			log.warn("Validation errors to edit the pet: {}", result.getAllErrors());
 			model.put("pet", pet);
 			return VIEWS_PETS_CREATE_OR_UPDATE_FORM;
 		}
 
 		owner.addPet(pet);
 		this.owners.save(owner);
-		log.info("Pet with the ID:{} updated successfully. ID owner: {} ",pet.getId(),owner.getId());
+		log.info("Pet with the ID:{} updated successfully. ID owner: {} ", pet.getId(), owner.getId());
 		redirectAttributes.addFlashAttribute("message", "Pet details has been edited");
 		return "redirect:/owners/{ownerId}";
 	}

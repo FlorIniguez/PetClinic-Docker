@@ -5,7 +5,7 @@
 <PatternLayout pattern="%d{HH:mm:ss.SSS} - %msg%n"/>
 </Console>
 
-	<Socket name="Logstash" host="localhost" port="5000">
+	<Socket name="Logstash" host="logstash" port="5000">
 		<JsonLayout properties="true" compact="true" eventEol="true"/>
 	</Socket>
 
