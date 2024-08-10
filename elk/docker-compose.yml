@@ -2,6 +2,9 @@
 services:
 
   spring-petclinic:
+    build:
+      context: ..
+      dockerfile: ../Dockerfile
     image: spring-petclinic
     container_name: spring-petclinic
     ports:
